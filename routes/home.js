@@ -1,15 +1,13 @@
 import { Router } from "express";
 const router = Router();
+import {create, deleteOne, renderUrls, updateOne, updateOnePost, redirect} from '../controllers/homeControllers.js';
+import validate from "../middlewares/validateUrl.js";
 
-router.get('/',(req, res)=>{
-    const urls = [
-        {origin: "www.google.com", shortURL: "fasfasd"},
-        {origin: "www.amazon.com", shortURL: "fasfasd"},
-        {origin: "www.mercadolibre.com", shortURL: "fasfasd"},
-        {origin: "www.youtube.com", shortURL: "fasfasd"}
-    ]
-    res.render('home', {urls});
-});
-
+router.get('/', renderUrls);
+router.post('/create',[validate], create);
+router.get('/delete/:_id', deleteOne);
+router.get('/update/:_id', updateOne);
+router.post('/update/:_id', updateOnePost);
+router.get('/:shortURL', redirect);
 
 export default router;

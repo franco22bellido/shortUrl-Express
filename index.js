@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.js';
 const app = express();
 
 app.use(express.static('public'));
+app.use(express.urlencoded({extended: false}));
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
 
