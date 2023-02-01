@@ -1,4 +1,5 @@
 import {Url} from '../models/Url.js';
+import { nanoid } from 'nanoid';
 
 
 export const renderUrls = async (req, res)=>{
@@ -19,7 +20,7 @@ export const create= async (req, res)=>{
     try { 
         const {origin} = req.body;
         
-        const url = new Url({origin: origin, shortURL: "url cortas"});
+        const url = new Url({origin: origin, shortURL: nanoid(4)});
         await url.save();
     
         res.redirect('/');
@@ -54,9 +55,10 @@ export const updateOnePost= async (req, res)=>{
 
 export const redirect = async (req ,res)=>{
     try {
+         
         const {shortURL}  = req.params;
         const document =await Url.findOne({shortURL}).lean();
-        console.log(document.origin);
+        if(!document) throw "no se pudo redireccionar porque no se encontro una url";
         res.redirect(document.origin);
     } catch (error) {
         res.json(error);
