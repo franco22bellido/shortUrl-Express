@@ -9,9 +9,12 @@ import db from './database/db.js'
 //sessions
 import session from 'express-session';
 import flash from 'connect-flash';
+import passport from 'passport';
+import passportInit from './libs/passportInit.js';
 
 import homeRoutes from './routes/home.js';
 import authRoutes from './routes/auth.js';
+
 
 const app = express();
 
@@ -26,6 +29,11 @@ app.use(session({
 }));
 //connect-flash inicialización.
 app.use(flash());
+//passport inicialización.
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);

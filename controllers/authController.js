@@ -9,6 +9,7 @@ export const loginForm = (req, res)=>{
 }
 
 export const login = async(req, res)=>{
+    //express validator
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         req.flash('msg', errors.array());
@@ -17,14 +18,21 @@ export const login = async(req, res)=>{
 
     const {username, password} = req.body;
     try {
+        //mongoose
         let user = await User.findOne({username});
 
         if(!user) throw "usuario o contraseña no valido";
         if(!user.acountConfirmed) throw "cuenta no confirmada";
         if(!await user.comparePassword(password)) throw "usuario o contraseña no valido";
-        res.redirect("/");
- 
+
+        // req.login() es un metodo de passport
+        req.login(user, (err)=>{
+            if(err) throw "no se pudó generar la sesión";
+            res.redirect('/');
+        });
+       
     } catch (error) {
+        console.log(error);
         req.flash('msg', [{msg: error}]);
         res.redirect('/auth/login');
     }
@@ -66,5 +74,16 @@ export const confirmAcount = async(req, res)=>{
         res.redirect('/auth/login');
     } catch (error) {
         res.json(error);
+    }
+}
+
+export const logOut = (req, res)=>{
+    try {
+        req.logOut((err)=>{
+            if(err) throw "falló al cerrar sesión."
+        });
+        return res.redirect('/auth/login');
+    } catch (error) {
+        console.log(error);
     }
 }
