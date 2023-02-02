@@ -4,9 +4,23 @@ const validate = (req, res, next)=>{
         const {origin} = req.body;
         
         const urlFrontEnd = new URL(origin);
-        next();
+        
+        if(urlFrontEnd.origin !== null){
+            return next();
+            // if(urlFrontEnd.protocol === "http://" || urlFrontEnd === "https://"){
+            //     return next();
+            // }else{
+            //     throw new Error("tiene que tener http o https://");
+            // }   
+        }
     } catch (error) {
-        res.json(error);
+        if(error.message == "Invalid URL"){
+            req.flash('msg', [{msg : "url no valida"}]);
+     
+        }else{
+        req.flash('msg', [{msg : error.message}]);
+        }
+        return res.redirect('/');
     }
 
 }

@@ -11,6 +11,7 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import passport from 'passport';
 import passportInit from './libs/passportInit.js';
+import csurf from 'csurf';
 
 import homeRoutes from './routes/home.js';
 import authRoutes from './routes/auth.js';
@@ -32,8 +33,14 @@ app.use(flash());
 //passport inicialización.
 app.use(passport.initialize());
 app.use(passport.session());
-
-
+//csurf
+app.use(csurf());
+//variables globales
+app.use((req, res, next)=>{
+    res.locals.csrfToken = req.csrfToken();
+    res.locals.msg = req.flash('msg');
+    next();
+});
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);

@@ -9,6 +9,12 @@ const urlSchema = new Schema({
     shortURL: {
         type: String,
         required :true
+    },
+    //añadiendo relacion muchos a uno.
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
 });
 

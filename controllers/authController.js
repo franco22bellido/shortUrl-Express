@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator';
 // 1:30
 // agregar flash a confirmacionde acount
 export const loginForm = (req, res)=>{
-    res.render('login', {msg: req.flash("msg")});
+    res.render('login');
 }
 
 export const login = async(req, res)=>{
@@ -39,8 +39,9 @@ export const login = async(req, res)=>{
 }
 
 export const registerForm = (req, res)=>{
-    res.render('register', {msg: req.flash("msg")});
+    res.render('register');
 }
+
 export const registerUser = async(req, res)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
