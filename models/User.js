@@ -39,14 +39,13 @@ userSchema.pre('save', async function(next){
       user.password = hash;
       next();
    } catch (error) {
-      console.log(error);
-      next();
+      throw new Error("error al codificar la contraseña");
    }
 });
 userSchema.methods.comparePassword =  async function(candidatePassword){
 
    return await bcrypt.compare(candidatePassword, this.password);
-   
+
 }
 export default mongoose.model('User', userSchema);
 

@@ -1,11 +1,20 @@
 import User from '../models/User.js';
 import { nanoid } from 'nanoid';
+import { validationResult } from 'express-validator'; 
 
+// 1:30
+// agregar flash a confirmacionde acount
 export const loginForm = (req, res)=>{
-    console.log("logins");
-    res.render('login');
+    res.render('login', {msg: req.flash("msg")});
 }
+
 export const login = async(req, res)=>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        req.flash('msg', errors.array());
+        return res.redirect('/auth/login');
+    };
+
     const {username, password} = req.body;
     try {
         let user = await User.findOne({username});
@@ -16,15 +25,21 @@ export const login = async(req, res)=>{
         res.redirect("/");
  
     } catch (error) {
-        res.json(error);   
+        req.flash('msg', [{msg: error}]);
+        res.redirect('/auth/login');
     }
 }
 
-
 export const registerForm = (req, res)=>{
-    res.render('register');
+    res.render('register', {msg: req.flash("msg")});
 }
 export const registerUser = async(req, res)=>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        req.flash('msg', errors.array());
+        return res.redirect('/auth/register');
+    };
+
     const {username, email, password} = req.body;
     try {
         let user = await User.findOne({email:email});
@@ -33,12 +48,10 @@ export const registerUser = async(req, res)=>{
         user = new User({username, email, password, tokenConfirm: nanoid()});
         await user.save();
         //enviar correo electronico con un token
-        res.redirect("/login");
+        res.redirect("/auth/login");
     } catch (error) {
-        res.json({
-            info: "error al guardar usuario",
-            error,
-        });   
+        req.flash("msg", [{msg: error}]);
+        return res.redirect('/auth/register');
     }
 }
 export const confirmAcount = async(req, res)=>{
@@ -49,7 +62,8 @@ export const confirmAcount = async(req, res)=>{
         user.acountConfirmed= true;
         user.tokenConfirm = null;
         await user.save();
-        res.redirect('/login');
+        req.flash('msg', [{msg: "se confirmó tu cuenta, puedes iniciar sesión"}]);
+        res.redirect('/auth/login');
     } catch (error) {
         res.json(error);
     }
