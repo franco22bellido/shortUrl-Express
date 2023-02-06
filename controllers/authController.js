@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import { nanoid } from 'nanoid';
 import { validationResult } from 'express-validator'; 
+import nodemailer from 'nodemailer';
 
 // 1:30
 // agregar flash a confirmacionde acount
@@ -56,7 +57,9 @@ export const registerUser = async(req, res)=>{
 
         user = new User({username, email, password, tokenConfirm: nanoid()});
         await user.save();
-        //enviar correo electronico con un token
+        //luego enviamos correo electronico con un token
+        req.flash("confirmar", `${req.headers.host}/auth/confirmAcount/${user.tokenConfirm}`);
+
         res.redirect("/auth/login");
     } catch (error) {
         req.flash("msg", [{msg: error}]);

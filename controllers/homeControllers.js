@@ -6,6 +6,7 @@ export const renderUrls = async (req, res)=>{
     try {
         const urls = await Url.find({user: req.user.id}).lean();
         
+       
         res.render('home', {urls});
         
     } catch (error) {

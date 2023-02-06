@@ -14,7 +14,12 @@
             <div class="alert alert-dark mb-2">{{this.msg}}</div>
         {{/each}}
 
+        {{#if confirmacount}}
+            <a href="{{confirmacount}}" class="btn btn-success">Confirmar cuenta</a>
+        {{/if}}
+        
         {{{body}}}
+
     </div>
 
 

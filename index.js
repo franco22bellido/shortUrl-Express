@@ -39,6 +39,7 @@ app.use(csurf());
 app.use((req, res, next)=>{
     res.locals.csrfToken = req.csrfToken();
     res.locals.msg = req.flash('msg');
+    res.locals.confirmacount = req.flash('confirmar');
     next();
 });
 
