@@ -1,0 +1,13 @@
+<h1 class="text-center">Bienvenido {{user.usename}}</h1>
+<p class="text-center">edita aqui tu perfil</p>
+
+<div class="my-2 text-center">
+    <img src="/img/perfiles/{{user.image}}" class="rounded-circle">
+</div>
+
+
+<form action="/profile/update?_csrf={{csrfToken}}" class="form-control" method="post" enctype="multipart/form-data">
+    {{!-- <input type="hidden" name="_csrf" value="{{csrfToken}}" /> --}}
+    <input type="file" class="forn-control form-control-sm" name="formFileSm">
+    <button class="btn btn-dark my-3"> Cambiar imagen</button>
+</form>

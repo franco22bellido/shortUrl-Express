@@ -27,6 +27,10 @@ const userSchema = new Schema({
    acountConfirmed: {
     type: Boolean,
     default : false
+   },
+   image: {
+      type: String,
+      default : null
    }
 });
 userSchema.pre('save', async function(next){
